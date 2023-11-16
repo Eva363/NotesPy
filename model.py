@@ -1,6 +1,6 @@
 
 import json
-#from view import Show, UserDialog, Show
+from typing import Any
 
 class Note:
     """ Класс Note содержит поля: 
@@ -12,12 +12,17 @@ class Note:
             newNote - добавление заметки
             deleteNote - удаление заметки
             updateNote - изменение заметки
+            getDicNote - возвращение множества заметок
+            getNote - возвращение заметки
     """
     def __init__(self, nameNote, dicNote={}, lenNote=0): 
         self.nameNote = nameNote
         self.dicNote = dicNote
         self.lenNote = lenNote
-
+    
+    def getDicNote(self) -> dict():
+        return self.dicNote
+    
     def loadNote(self) -> dict():
         try:
             with open(self.nameNote, 'r') as f:
@@ -45,15 +50,6 @@ class Note:
     def updateNote(self, id, t):
         self.dicNote[id] = t
     
-
-if __name__ == '__main__':
-    # t = Note("note.json")
-    # d = t.loadNote()
-    # t.newNote(UserDialog.requestNoteData())
-    # t.newNote(UserDialog.requestNoteData())
-    # t.deleteNote('1')
-    # t.updateNote('2', UserDialog.requestNoteData())
-    # s = Show(d)
-    # s.showNote()
-    # t.saveNote()
-    pass
+    def getNote(self, id):
+        return self.dicNote[id]
+        
