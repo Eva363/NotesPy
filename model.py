@@ -1,6 +1,5 @@
 
 import json
-from typing import Any
 
 class Note:
     """ Класс Note содержит поля: 
@@ -22,7 +21,7 @@ class Note:
     
     def getDicNote(self) -> dict():
         return self.dicNote
-    
+        
     def loadNote(self) -> dict():
         try:
             with open(self.nameNote, 'r') as f:
@@ -35,10 +34,10 @@ class Note:
         else:
             self.lenNote = 0
         return self.dicNote
-
+    
     def saveNote(self, reg='w'):
         with open(self.nameNote, reg) as f:
-            json.dump(self.dicNote,f, indent=4)
+            json.dump(self.dicNote, f, indent=4)
 
     def newNote(self, t):
         self.lenNote += 1

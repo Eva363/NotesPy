@@ -1,15 +1,14 @@
 
 import keyboard
+from datetime import datetime
 from model import Note
     
 class UserDialog:
     """
-    Абстрактный класс UserDialog содержит методы для запроса данных от пользователя
+    Класс UserDialog содержит методы для запроса данных от пользователя
     Метод requestNoteData - служит для ввода заголовка и текста заметки
     Метод requestNoteId - служит для ввода идентификатора заметки
     """
-    # def __init__(self, message) -> None:
-    #     print(message)
 
     def requestNoteData(msg='Новая заметка', title='', note='') -> dict():
         print(msg)
@@ -17,7 +16,7 @@ class UserDialog:
         title = input('Заголовок: ')
         keyboard.write(note)
         note = input('Текст заметки: ') 
-        return {'title':title, 'note':note}
+        return {'title':title, 'note':note, 'datetime_modify':datetime.now().strftime("%d.%m.%Y %H:%M:%S")}
     
     def requestNoteId(note) -> str:
         id = input('Идентификатор заметки: ')
@@ -26,7 +25,17 @@ class UserDialog:
         else:
             print("Заметка не найдена")
             return None
-
+    def requestNoteDate() -> str:
+        date_str = input('Введите дату в формате дд.мм.гггг: ')
+        try:
+            datetime.strptime(date_str, '%m/%d/%y %H:%M:%S')
+            return date_str
+        except ValueError: 
+            print('Неверный формат даты!')
+            return ''
+        else:
+            print("Заметка не найдена")
+            return None
 class UI:
     """
     Класс UI описывает пользовательский интерфейс консольного ввода команд управления заметками
@@ -36,9 +45,11 @@ class UI:
     def __init__(self, note) -> None:
         self.note = note
 
-    def showNote(self, filterData='') -> None:
-        for key, value in self.note.getDicNote().items():        
-            print(f'{key} {value["title"]} {value["note"]}')
+    def showNote(self, date_filter='') -> None:
+        print('\nСписок заметок:')
+        for key, value in self.note.getDicNote().items():
+            if date_filter in value['datetime_modify']:        
+                print(f"{key} {value['datetime_modify']} {value['title']} {value['note']}")
 
     def start(self) -> None:
         print("\n" + "-"*50 +"\nПриложение Notes - Заметки\n" + "-"*50)
@@ -51,7 +62,7 @@ class UI:
                     input("Завершено")
                     break
                 case 'list':
-                    self.showNote()
+                    self.showNote(UserDialog.requestNoteDate())
                 case 'add':
                     self.note.newNote(UserDialog.requestNoteData())
                 case 'update':
@@ -66,7 +77,6 @@ class UI:
                                 , dicUpdNote["note"]
                             )
                         )
-
                 case 'delete':
                     noteId = UserDialog.requestNoteId(self.note)
                     if noteId:
