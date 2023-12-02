@@ -28,7 +28,7 @@ class UserDialog:
     def requestNoteDate() -> str:
         date_str = input('Введите дату в формате дд.мм.гггг: ')
         try:
-            datetime.strptime(date_str, '%m/%d/%y %H:%M:%S')
+            datetime.strptime(date_str, '%d/%m/%Y')
             return date_str
         except ValueError: 
             print('Неверный формат даты!')
